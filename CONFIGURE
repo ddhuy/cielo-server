@@ -1,0 +1,55 @@
+#!/bin/bash
+if [ "x$PROJ_HOME" = "x" ]; then
+    export PROJ_HOME=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+    export VENV_HOME=$PROJ_HOME/venv
+    export PROMPT="[CIELO_WS]"
+fi
+
+echo "Project Home Directory: $PROJ_HOME"
+
+# create virtual environment for WS
+echo "+---------------+"
+echo "| Configuration | Configuring Project Environment."
+echo "+---------------+"
+virtualenv --always-copy --prompt="$PROMPT " $VENV_HOME
+if [ $? != 0 ]; then
+    echo "Cannot create virtual environment for project"
+    exit $?;
+fi
+
+virtualenv --relocatable $VENV_HOME/
+if [ $? != 0 ]; then
+    echo "Configure Project Environment failed"
+    exit $?;
+fi
+
+# activate virtualenv
+. $VENV_HOME/bin/activate
+if [ $? != 0 ]; then
+    echo "Unable to activate Project Environment"
+    exit $?;
+fi
+
+# install dependencies on local project
+#pip install -r $PROJ_HOME/Requirements.txt
+if [ $? != 0 ]; then
+    echo "Cannot install python packages"
+    exit $?;
+fi
+
+# deactivate before exiting
+echo ""
+echo "+----------+"
+echo "| CLEAN-UP | Cleaning..."
+echo "+----------+"
+deactivate
+if [ $? != 0 ]; then
+    echo "Cleaning up after install failed"
+    exit $?;
+fi
+
+# DONE
+echo ""
+echo "+---------+"
+echo "| SUCCESS | You can start Project manually later."
+echo "+---------+"

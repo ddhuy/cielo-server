@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "x$WS_HOME" = "x" ]; then
+    export WS_HOME=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+fi
+echo "Cielo WS Home Directory: $WS_HOME"
+
+deactivate > /dev/null 2>&1
+source $WS_HOME/VEnv/bin/activate
+
+if [ 1 == 1 ]; then
+    echo "+--------------------+"
+    echo "| Migrate Web Server |"
+    echo "+--------------------+"
+    python $WS_HOME/manage.py migrate
+    if [ $? != 0 ]; then
+        echo "Server migrating exits with error code: $?"
+        break
+    fi
+
+    echo "+------------------+"
+    echo "| Start Web Server |"
+    echo "+------------------+"
+    python $WS_HOME/manage.py runserver 0:8082
+    if [ $? != 0 ]; then
+        echo "Web Server exits with error code: $?"
+        break
+    fi
+fi
+# SLT_WebServer is stopped, clean-up before exit
+deactivate > /dev/null 2>&1
