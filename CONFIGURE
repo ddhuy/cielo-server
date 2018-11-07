@@ -31,7 +31,8 @@ if [ $? != 0 ]; then
 fi
 
 # install dependencies on local project
-#pip install -r $PROJ_HOME/Requirements.txt
+wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-pip.py
+pip install -r $PROJ_HOME/Requirements.txt
 if [ $? != 0 ]; then
     echo "Cannot install python packages"
     exit $?;
