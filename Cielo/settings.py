@@ -72,9 +72,13 @@ WSGI_APPLICATION = 'Cielo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-DATBASE_DIR = os.path.join(BASE_DIR, 'Database')
+DATABASE_DIR = os.path.join(BASE_DIR, 'Database')
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(DATABASE_DIR, 'cielo_dashboard.db')
+    },
+    'postgresql': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'HOST': os.environ.get('CIELO_DB_HOST', ''),
         'PORT': os.environ.get('CIELO_DB_PORT', ''),
@@ -83,6 +87,14 @@ DATABASES = {
         'PASSWORD': os.environ.get('CIELO_DB_PASS', ''),
     },
 }
+# MongoDB connection
+from mongoengine import connect
+MONGO_DB_HOST = os.environ.get('CIELO_MONGODB_HOST', 'ddh-vpc.local')
+MONGO_DB_PORT = os.environ.get('CIELO_MONGODB_PORT', 27017)
+MONGO_DB_NAME = os.environ.get('CIELO_MONGODB_NAME', 'CieloDB')
+MONGO_DB_USER = os.environ.get('CIELO_MONGODB_USER', '')
+MONGO_DB_PASS = os.environ.get('CIELO_MONGODB_PASS', '')
+connect(host = MONGO_DB_HOST, port = MONGO_DB_PORT, db = MONGO_DB_NAME)
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
