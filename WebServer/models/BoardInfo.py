@@ -88,5 +88,3 @@ class BoardInfo ( Document ) :
     Devices = fields.ListField(fields.EmbeddedDocumentField(DeviceInfo))
     Note = fields.EmbeddedDocumentField(NoteInfo)
     Server = fields.ReferenceField(ControlServer, required = True)
-
-print('BOARD INFO')

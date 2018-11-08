@@ -26,5 +26,3 @@ class RackInfo ( Document ) :
 
     def __str__ ( self ) :
         return '%s:%s:%s' % (self.Status, self.Type, self.Name)
-
-print('RACK INFO')
