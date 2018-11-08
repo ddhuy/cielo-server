@@ -1,8 +1,9 @@
-from rest_framework import serializers
+from rest_framework_mongoengine import serializers
 
 from WebServer.models import BoardInfo
 
-class BoardInfoSerializer ( serializers.HyperlinkedModelSerializer ) :
+class BoardInfoSerializer ( serializers.DocumentSerializer ) :
     class Meta:
         model = BoardInfo
         fields = '__all__'
+        depth = 2

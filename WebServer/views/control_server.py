@@ -6,12 +6,12 @@ from django.shortcuts import render
 from Cielo.cielo_errno import EID
 from Cielo.cielo_logger import LOG
 
-from WebServer.models import ControlServer, BoardInfo
-from WebServer.serializers import ControlServerSerializer, BoardInfoSerializer
+from WebServer.models import ControlServer
+from WebServer.serializers import ControlServerSerializer
 from WebServer.views import BasePage
 
 class ControlServerPage ( BasePage ) :
-    template_name = 'dashboard.html'
+    template_name = 'control_server.html'
 
     def __init__ ( self ) :
         super(ControlServerPage, self).__init__()

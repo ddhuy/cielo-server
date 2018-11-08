@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 # Register your views here.
 from WebServer.views.base import BasePage
 from WebServer.views.control_server import ControlServerPage
+from WebServer.views.dashboard import DashboardPage
 __all__ = [
     'BasePage',
     'ControlServerPage',
+    'DashboardPage',
 ]
