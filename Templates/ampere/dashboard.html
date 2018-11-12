@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block page_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cielo_dashboard.css' %}">
+{% endblock page_css %}
+
+{% block page_title %}Cielo Dashboard{% endblock page_title %}
+
+{% block page_content %}
+<div class="" id="id_BoardDialog" style="display: none;">
+</div>
+
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-header">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1></h1>
+                </div>
+                <div class="col-sm-6">
+                    {% if Role %}
+                    <button type="button" class="btn btn-info btn-new new-board"><i class="fa fa-plus"></i> Install Board</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% for board in CieloBoards %}
+            {% if board %}
+            <div class="board-row" data-board-serial="{{ board.Serial }}">
+                {% if board.user %}
+                <div class="board-brief inactive">
+                {% else %}
+                <div class="board-brief active">
+                {% endif %}
+                    <p class="full-width">
+                        <label for="">Serial</label>
+                        <input type="text" name="Serial" class="board-controls board-test" value="{{ board.Serial }}" disabled="disabled">
+                    </p>
+                    <p class="full-width">
+                        <label for="">Owner</label>
+                        <input type="text" name="Owner" class="board-controls board-test id_Owner" value="{{ board.user }}" disabled="disabled">
+                    </p>
+                    <div class="control-buttons">
+                        <a class="edit edit-board" data-tooltip="Edit"><i class="material-icons">&#xE254;</i></a>
+                        <a class="deactivate deactivate-board" data-tooltip="Remove"><i class="material-icons">&#xE872;</i></a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock page_content %}
+
+{% block page_js %}
+    <script type="text/javascript" src="{% static 'js/cielo_dashboard.js' %}"></script>
+{% endblock page_js %}
