@@ -26,5 +26,3 @@ class ControlServer ( Document ) :
 
     def __str__ ( self ) :
         return '[%s][%s][%s:%s]' % (self.Status, self.Name, self.IP, self.Port)
-
-print('CONTROL SERVER')

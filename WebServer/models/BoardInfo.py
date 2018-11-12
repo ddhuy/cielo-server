@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from mongoengine import DynamicEmbeddedDocument, EmbeddedDocument, Document, fields
 
-from WebServer.models.ControlServer import ControlServer
+from WebServer.models import ControlServer, RackInfo
 
 ####################
 # HARDWARE SECTION #
@@ -21,8 +21,10 @@ class SoftwareSection ( DynamicEmbeddedDocument ) :
 # PUBLIC INFO #
 ###############
 class PublicInfo ( EmbeddedDocument ) :
-    Hardware = fields.EmbeddedDocumentField(HardwareSection)
-    Software = fields.EmbeddedDocumentField(SoftwareSection)
+    #Hardware = fields.EmbeddedDocumentField(HardwareSection)
+    #Software = fields.EmbeddedDocumentField(SoftwareSection)
+    Hardware = fields.DynamicField()
+    Software = fields.DynamicField()
 
 ###############
 # BMC SECTION #
@@ -86,7 +88,7 @@ class BoardInfo ( Document ) :
     Info = fields.EmbeddedDocumentField(PublicInfo)
     Private = fields.EmbeddedDocumentField(PrivateInfo)
     Devices = fields.ListField(fields.EmbeddedDocumentField(DeviceInfo))
-    Note = fields.EmbeddedDocumentField(NoteInfo)
-    Server = fields.ReferenceField(ControlServer, required = True)
-
-print('BOARD INFO')
+    #Note = fields.EmbeddedDocumentField(NoteInfo)
+    Note = fields.DynamicField()
+    Server = fields.ReferenceField(ControlServer.ControlServer, required = True, dbref = False)
+    Rack = fields.ReferenceField(RackInfo.RackInfo, null = True, blank = True, dbref = False)
