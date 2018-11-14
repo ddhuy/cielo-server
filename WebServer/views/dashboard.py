@@ -1,77 +1,83 @@
 import json
 
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-
 from Cielo.cielo_errno import EID
-from Cielo.cielo_logger import LOG
 
 from WebServer.models import BoardInfo
 from WebServer.serializers import BoardInfoSerializer
 from WebServer.views import BasePage
 
-class DashboardPage ( BasePage ) :
+
+class DashboardPage(BasePage):
     template_name = 'dashboard.html'
 
-    def __init__ ( self ) :
+    def __init__(self):
         super(DashboardPage, self).__init__()
-        self._funcdict = {
-            'GetBoards': self.__GetBoards,
-            'InsertBoard': self.__InsertBoard,
-            'UpdateBoard': self.__UpdateBoard,
-            'DeleteBoard': self.__DeleteBoard,
+        self._func_dict = {
+            'GetBoards': self.__get_boards,
+            'InsertBoard': self.__insert_board,
+            'UpdateBoard': self.__update_board,
+            'DeleteBoard': self.__delete_board,
         }
 
-    def __GetBoards ( self, request, *args, **kwargs ) :
-        return EID.OK, BoardInfoSerializer(BoardInfo.objects, many = True).data
+    @staticmethod
+    def __get_boards(request):
+        board_serial = request.POST.get('Serial', None)
+        if board_serial is None:
+            return EID.OK, BoardInfoSerializer(BoardInfo.objects, many = True).data
+        else:
+            return EID.OK, BoardInfoSerializer(BoardInfo.objects(Serial = board_serial), many = True).data
 
-    def __InsertBoard ( self, request, *args, **kwargs ) :
-        Data = request.POST.get('Data', None)
+    @staticmethod
+    def __insert_board(request):
+        board_data = request.POST.get('Data', None)
 
-        try :
-            Data = json.loads(Data)
+        try:
+            board_data = json.loads(board_data)
         except Exception as ex:
             return EID.BAD_REQUEST, str(ex)
 
-        try :
-            Board = BoardInfo(**Data).save()
-            return EID.OK, BoardInfoSerializer(Board).data
+        try:
+            board_info = BoardInfo(**board_data).save()
+            return EID.OK, BoardInfoSerializer(board_info).data
         except Exception as ex:
             return EID.INTERNAL_SERVER_ERROR, str(ex)
 
-    def __UpdateBoard ( self, request, *args, **kwargs ) :
-        ID = request.POST.get('ID', None)
-        Serial = request.POST.get('Serial', None)
-        Data = request.POST.get('Data', None)
+    @staticmethod
+    def __update_board(request):
+        board_id = request.POST.get('ID', None)
+        board_serial = request.POST.get('Serial', None)
+        board_data = request.POST.get('Data', None)
 
-        try :
-            Data = json.loads(Data)
+        try:
+            board_data = json.loads(board_data)
         except Exception as ex:
             return EID.BAD_REQUEST, str(ex)
 
-        try :
-            if (ID) :
-                Board = BoardInfo.objects.get(id = ID)
-                b = Board.modify(**Data)
-                return EID.OK, BoardInfoSerializer(Board).data
-            elif (Serial) :
-                Board = BoardInfo.objects.get(Serial = Serial)
-                b = Board.modify(**Data)
-                return EID.OK, BoardInfoSerializer(Board).data
-            else :
+        try:
+            if board_id:
+                board_info = BoardInfo.objects.get(id = board_id)
+                board_info.modify(**board_data)
+                return EID.OK, BoardInfoSerializer(board_info).data
+            elif board_serial:
+                board_info = BoardInfo.objects.get(Serial = board_serial)
+                board_info.modify(**board_data)
+                return EID.OK, BoardInfoSerializer(board_info).data
+            else:
                 return EID.BAD_REQUEST, 'Could not update Board with empty ID and Serial'
         except Exception as ex:
             return EID.INTERNAL_SERVER_ERROR, str(ex)
 
-    def __DeleteBoard ( self, request, *args, **kwargs ) :
-        ID = request.POST.get('ID', None)
-        Serial = request.POST.get('Serial', None)
-        try :
-            if (ID) :
-                return EID.OK, BoardInfo.objects(id = ID).delete()
-            elif (Serial) :
-                return EID.OK, BoardInfo.objects(Serial = Serial).delete()
-            else :
+    @staticmethod
+    def __delete_board(request):
+        board_id = request.POST.get('ID', None)
+        board_serial = request.POST.get('Serial', None)
+
+        try:
+            if board_id:
+                return EID.OK, BoardInfo.objects(id = board_id).delete()
+            elif board_serial:
+                return EID.OK, BoardInfo.objects(Serial = board_serial).delete()
+            else:
                 return EID.BAD_REQUEST, 'Could not update Board with empty ID and Serial'
         except Exception as ex:
             return EID.INTERNAL_SERVER_ERROR, str(ex)
