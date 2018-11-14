@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from mongoengine import connect
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -91,7 +92,6 @@ DATABASES = {
     },
 }
 # MongoDB connection
-from mongoengine import connect
 MONGO_DB_HOST = os.environ.get('CIELO_MONGODB_HOST', 'ddh-vpc.local')
 MONGO_DB_PORT = os.environ.get('CIELO_MONGODB_PORT', 27017)
 MONGO_DB_NAME = os.environ.get('CIELO_MONGODB_NAME', 'CieloDB')
@@ -134,7 +134,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static.root')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'Static'),
 )

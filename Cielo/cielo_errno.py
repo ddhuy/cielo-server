@@ -1,5 +1,6 @@
 import httplib
 
+
 # Re-use http status codes as Cielo error codes
 class EID:
     CONTINUE = httplib.CONTINUE
@@ -51,3 +52,6 @@ class EID:
     HTTP_VERSION_NOT_SUPPORTED = httplib.HTTP_VERSION_NOT_SUPPORTED
     INSUFFICIENT_STORAGE = httplib.INSUFFICIENT_STORAGE
     NOT_EXTENDED = httplib.NOT_EXTENDED
+
+    def __init__(self):
+        super(EID, self).__init__()

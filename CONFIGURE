@@ -1,39 +1,39 @@
 #!/bin/bash
-if [ "x$PROJ_HOME" = "x" ]; then
-    export PROJ_HOME=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
-    export VENV_HOME=$PROJ_HOME/venv
+
+if [[ "x${PROJ_DIR}" = "x" ]]; then
+    export PROJ_DIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+    export VENV_DIR=${PROJ_DIR}/venv
     export PROMPT="[CIELO_WS]"
 fi
-
-echo "Project Home Directory: $PROJ_HOME"
+echo "Project Home Directory: $PROJ_DIR"
 
 # create virtual environment for WS
 echo "+---------------+"
 echo "| Configuration | Configuring Project Environment."
 echo "+---------------+"
-virtualenv --always-copy --prompt="$PROMPT " $VENV_HOME
-if [ $? != 0 ]; then
+virtualenv --always-copy --prompt="$PROMPT " ${VENV_DIR}
+if [[ $? != 0 ]]; then
     echo "Cannot create virtual environment for project"
     exit $?;
 fi
 
-virtualenv --relocatable $VENV_HOME/
-if [ $? != 0 ]; then
+virtualenv --relocatable ${VENV_DIR}/
+if [[ $? != 0 ]]; then
     echo "Configure Project Environment failed"
     exit $?;
 fi
 
 # activate virtualenv
-. $VENV_HOME/bin/activate
-if [ $? != 0 ]; then
+. ${VENV_DIR}/bin/activate
+if [[ $? != 0 ]]; then
     echo "Unable to activate Project Environment"
     exit $?;
 fi
 
 # install dependencies on local project
 wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-pip.py
-pip install -r $PROJ_HOME/Requirements.txt
-if [ $? != 0 ]; then
+pip install -r ${PROJ_DIR}/Requirements.txt
+if [[ $? != 0 ]]; then
     echo "Cannot install python packages"
     exit $?;
 fi
@@ -44,7 +44,7 @@ echo "+----------+"
 echo "| CLEAN-UP | Cleaning..."
 echo "+----------+"
 deactivate
-if [ $? != 0 ]; then
+if [[ $? != 0 ]]; then
     echo "Cleaning up after install failed"
     exit $?;
 fi

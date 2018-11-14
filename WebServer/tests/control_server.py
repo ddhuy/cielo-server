@@ -1,4 +1,5 @@
-import json, requests
+import json
+import requests
 
 URL = 'http://localhost:8080/control_server/'
 
