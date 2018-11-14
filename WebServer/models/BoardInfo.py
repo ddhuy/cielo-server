@@ -3,64 +3,73 @@ from __future__ import unicode_literals
 
 from mongoengine import DynamicEmbeddedDocument, EmbeddedDocument, Document, fields
 
-from WebServer.models import ControlServer, RackInfo
+from WebServer.models.ControlServer import ControlServer
+from WebServer.models.RackInfo import RackInfo
+
 
 ####################
 # HARDWARE SECTION #
 ####################
-class HardwareSection ( DynamicEmbeddedDocument ) :
+class HardwareSection(DynamicEmbeddedDocument):
     pass
+
 
 ####################
 # SOFTWARE SECTION #
 ####################
-class SoftwareSection ( DynamicEmbeddedDocument ) :
+class SoftwareSection(DynamicEmbeddedDocument):
     pass
+
 
 ###############
 # PUBLIC INFO #
 ###############
-class PublicInfo ( EmbeddedDocument ) :
-    #Hardware = fields.EmbeddedDocumentField(HardwareSection)
-    #Software = fields.EmbeddedDocumentField(SoftwareSection)
+class PublicInfo(EmbeddedDocument):
+    # Hardware = fields.EmbeddedDocumentField(HardwareSection)
+    # Software = fields.EmbeddedDocumentField(SoftwareSection)
     Hardware = fields.DynamicField()
     Software = fields.DynamicField()
+
 
 ###############
 # BMC SECTION #
 ###############
-class BmcSection ( DynamicEmbeddedDocument ) :
+class BmcSection(DynamicEmbeddedDocument):
     IP = fields.StringField()
     Username = fields.StringField()
     Password = fields.StringField()
     MaxSOL = fields.StringField()
 
+
 #################
 # POWER SECTION #
 #################
-class PowerSection ( DynamicEmbeddedDocument ) :
+class PowerSection(DynamicEmbeddedDocument):
     Type = fields.StringField()
     Vendor = fields.StringField()
     IP = fields.StringField()
     Port = fields.StringField()
 
+
 ################
 # PRIVATE INFO #
 ################
-class PrivateInfo ( EmbeddedDocument ) :
+class PrivateInfo(EmbeddedDocument):
     BMC = fields.EmbeddedDocumentField(BmcSection)
     Power = fields.EmbeddedDocumentField(PowerSection)
+
 
 ################
 # NOTES INFO #
 ################
-class NoteInfo ( DynamicEmbeddedDocument ) :
+class NoteInfo(DynamicEmbeddedDocument):
     pass
+
 
 ################
 # DEVICES INFO #
 ################
-class DeviceInfo ( EmbeddedDocument ) :
+class DeviceInfo(EmbeddedDocument):
     Type = fields.StringField()
     Vendor = fields.StringField()
     Serial = fields.StringField()
@@ -68,6 +77,7 @@ class DeviceInfo ( EmbeddedDocument ) :
     Speed = fields.StringField()
     Slot = fields.StringField()
     Revision = fields.StringField()
+
 
 ##############
 # BOARD INFO #
@@ -81,14 +91,16 @@ BOARD_STATUSES = (
     (BOARD_STT_BUSY, 'Busy'),
 )
 BOARD_STT_DEFAULT = BOARD_STT_FREE
-class BoardInfo ( Document ) :
+
+
+class BoardInfo(Document):
     meta = {'collection': 'Boards'}
     Serial = fields.StringField(null = False, blank = False, required = True, unique = True)
     Status = fields.StringField(null = False, blank = False, choices = BOARD_STATUSES, default = BOARD_STT_DEFAULT)
     Info = fields.EmbeddedDocumentField(PublicInfo)
     Private = fields.EmbeddedDocumentField(PrivateInfo)
     Devices = fields.ListField(fields.EmbeddedDocumentField(DeviceInfo))
-    #Note = fields.EmbeddedDocumentField(NoteInfo)
+    # Note = fields.EmbeddedDocumentField(NoteInfo)
     Note = fields.DynamicField()
-    Server = fields.ReferenceField(ControlServer.ControlServer, required = True, dbref = False)
-    Rack = fields.ReferenceField(RackInfo.RackInfo, null = True, blank = True, dbref = False)
+    Server = fields.ReferenceField(ControlServer, required = True, dbref = False)
+    Rack = fields.ReferenceField(RackInfo, null = True, blank = True, dbref = False)

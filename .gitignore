@@ -106,3 +106,4 @@ venv.bak/
 # Cielo stuff
 Logs/
 Database/
+.idea/
