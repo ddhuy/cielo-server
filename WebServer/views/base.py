@@ -19,7 +19,7 @@ class BasePage(TemplateView):
     def post(self, request):
         LOG.info(request.POST)
         req_action = request.POST.get('Action', '')
-        for action in self._funcdict:
+        for action in self._func_dict:
             if action == req_action:
                 s = time.clock()
                 errno, post_resp = self._func_dict[action](request)
