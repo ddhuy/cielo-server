@@ -3,13 +3,21 @@
         "model": "auth.group",
         "pk": 1,
         "fields": {
-            "name": "Operator",
+            "name": "Administrator",
             "permissions": []
         }
     },
     {
         "model": "auth.group",
         "pk": 2,
+        "fields": {
+            "name": "Operator",
+            "permissions": []
+        }
+    },
+    {
+        "model": "auth.group",
+        "pk": 3,
         "fields": {
             "name": "Tester",
             "permissions": []

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from mongoengine import DynamicEmbeddedDocument, EmbeddedDocument, Document, fields
+from mongoengine import Document, DynamicEmbeddedDocument, EmbeddedDocument, fields
 
 from WebServer.models.ControlServer import ControlServer
 from WebServer.models.RackInfo import RackInfo

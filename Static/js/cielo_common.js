@@ -96,7 +96,7 @@ function parse_ini ( data ) {
             section = match[1];
         } else if (line.length == 0 && section) {
             section = null;
-        };
+        }
     });
     return value;
 }
